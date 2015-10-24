@@ -1,0 +1,14 @@
+development: 
+  app_id: 5112262
+  app_key: 'ZFjkci55kUxMj4p05N0n'
+  la_group_id: 90309416
+
+test: 
+  app_id: 5112262
+  app_key: 'ZFjkci55kUxMj4p05N0n'
+  la_group_id: 90309416
+
+production: 
+  app_id: 5112262
+  app_key: 'ZFjkci55kUxMj4p05N0n'
+  la_group_id: 90309416
