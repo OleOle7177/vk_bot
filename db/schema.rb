@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151024111308) do
+ActiveRecord::Schema.define(version: 20151025090756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20151024111308) do
     t.string   "access_token"
     t.datetime "token_expires_at"
     t.integer  "vk_id"
+    t.boolean  "should_notify",    default: false
   end
 
   add_index "fakes", ["user_id"], name: "index_fakes_on_user_id", using: :btree

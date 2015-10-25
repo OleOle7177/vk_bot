@@ -1,4 +1,5 @@
 VK_CONFIG = YAML.load_file("#{::Rails.root}/config/vk.yml")[::Rails.env]
+PASSWORD_CONFIG = YAML.load_file("#{::Rails.root}/config/password.yml")[::Rails.env]
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

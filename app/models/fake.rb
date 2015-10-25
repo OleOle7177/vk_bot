@@ -11,10 +11,13 @@ class Fake < ActiveRecord::Base
 
   IV = "\xDA\x96n\xEC\xC3Z\xF3\x88'oR\x94+2\x9B0"
 
+  scope :should_notify, -> { where(send_messages: true) }
+
+
   def encrypt_password
     cipher = OpenSSL::Cipher.new('aes-256-cbc')
     cipher.encrypt
-    cipher.key = Digest::SHA1.hexdigest('1799Pushkin1837')
+    cipher.key = PASSWORD_CONFIG['key']
     cipher.iv = IV
 
     encrypted = cipher.update(password) + cipher.final
@@ -26,7 +29,7 @@ class Fake < ActiveRecord::Base
 
     decipher = OpenSSL::Cipher.new('aes-256-cbc')
     decipher.decrypt
-    decipher.key = Digest::SHA1.hexdigest('1799Pushkin1837')
+    decipher.key = PASSWORD_CONFIG['key']
     decipher.iv = IV
 
     decipher.update(decoded) + decipher.final

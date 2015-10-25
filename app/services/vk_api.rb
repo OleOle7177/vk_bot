@@ -5,7 +5,10 @@ module Services
     def self.send_message(token, user_id, text)
 
       conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
+        faraday.request :retry, max: 5, interval: 0.4,
+                       interval_randomness: 0.5, backoff_factor: 2,
+                       exceptions: ['Timeout::Error']
+        faraday.request :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
@@ -25,7 +28,10 @@ module Services
     def self.get_friends(user_id)
 
       conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
+        faraday.request :retry, max: 5, interval: 0.4,
+                       interval_randomness: 0.5, backoff_factor: 2,
+                       exceptions: ['Timeout::Error']
+        faraday.request :url_encoded                        # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
@@ -42,7 +48,10 @@ module Services
     def self.get_group_members(group_id)
 
       conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
+        faraday.request :retry, max: 5, interval: 0.4,
+               interval_randomness: 0.5, backoff_factor: 2,
+               exceptions: ['Timeout::Error']
+        faraday.request :url_encoded           # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
@@ -60,7 +69,10 @@ module Services
     def self.get_messages(token, user_id)
 
       conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
+        faraday.request :retry, max: 5, interval: 0.4,
+               interval_randomness: 0.5, backoff_factor: 2,
+               exceptions: ['Timeout::Error']
+        faraday.request :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
