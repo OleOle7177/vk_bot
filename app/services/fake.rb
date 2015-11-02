@@ -6,8 +6,9 @@ module Services
       @fake = fake
     end
 
-    def notify_friends
+    def notify
       # получаем друзей из вк
+      check_authorize
       get_vk_friends
       sleep(0.5)
       # TODO сохранить friends_vk['count'] в БД
@@ -34,9 +35,10 @@ module Services
           check_authorize 
           p 'NEED TO SEND MESSAGE'
           p friend.vk_id
-          sleep(rand(1..10))
+          sleep(rand(1..20))
           Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
           friend.notified = true
+          friend.notification_date = Time.zone.now
           friend.save
         end
       end
@@ -75,7 +77,7 @@ module Services
       ::FakesFriend.import(['friend_id', 'fake_id'], friend_ids, validate: true)
     end
 
-    # private
+    private
 
    # получение токена и времени жизни токена
     def authorize 
@@ -128,7 +130,6 @@ module Services
 
         {access_token: access_token, expires_at: expires_at}
       rescue StandardError => e
-        pp e
         count += 1
         retry if count <= 4
       end
@@ -136,28 +137,37 @@ module Services
     end
 
 
-    # получаем людей нашей группы
+    # получаем людей нашей группы и сохраняем их в бд
     def get_our_group_members
       group_members_vk = Services::VkApi.get_group_members(VK_CONFIG['la_group_id'])
+      iterations = group_members_vk['count']/1000
       
-      # смотрим, есть ли данный человек в бд, 
-      # если есть и у него in_group = false, 
-      # то меняем in_group на true
-      group_members_vk['items'].each do |member|
-        member_db = ::Friend.find_by(vk_id: member)
-        if member_db.present? 
-          if member_db.in_group == false
-            member_db.in_group = true
-            member_db.save
-          end
+      for i in 0..iterations
+        sleep(0.34)
+        if i != 0
+          group_members_vk = Services::VkApi.get_group_members(VK_CONFIG['la_group_id'], 
+                                                               offset = i*1000)
         end
+
+        # кто был в таблице друзей, но еще не был в группе,
+        # а теперь в группе - обновляем in_group 
+        ::Friend.where(vk_id: group_members_vk['items']).
+                 update_all(in_group: true)
+        
+        friends_db = ::Friend.pluck(:vk_id)
+        diff_friends = group_members_vk['items'] - friends_db
+        diff_friends.map!{|friend| [friend, false, true]}
+
+        ::Friend.import(['vk_id', 'notified', 'in_group'], diff_friends, validate: true)
       end
 
     end
 
     # проверяем истек ли токен, если да, то получаем новый
     def check_authorize
+      p 'CHECK AUTHORIZE'
       if @fake.access_token.blank? || @fake.token_expires_at <= Time.zone.now 
+        p 'NEED AUTHORIZE'
         authorize
         sleep(0.5)
       end

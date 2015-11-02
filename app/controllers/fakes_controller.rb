@@ -1,4 +1,5 @@
 class FakesController < ApplicationController
+  before_action :authorize
   before_action :set_fake, only: [:show, :edit, :update, :destroy, 
                                   :send_message]
 
@@ -24,7 +25,12 @@ class FakesController < ApplicationController
   def destroy
   end
 
-  def send_message
+  def notify
+    fake = Fake.find(params[:fake_id])
+    service = Services::Fake.new(fake)
+    service.notify
+    
+    redirect_to fakes_path
   end
 
 

@@ -2,11 +2,22 @@ doctype html
 html
   head
     title Fake Manager
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application'    
+    = stylesheet_link_tag  'application', media: 'all', 'data-turbolinks-track' => true
     = csrf_meta_tags
   head
+  
+
   body
-    .container
+    .loader
+      .preloader-wrapper.big.active
+        .spinner-layer
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+    .content
+      - if current_user
+        = render 'shared/menu'
+      = render 'shared/flash'
       = yield
-  body
-html

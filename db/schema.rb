@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151025090756) do
+ActiveRecord::Schema.define(version: 20151101142215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,22 +34,29 @@ ActiveRecord::Schema.define(version: 20151025090756) do
     t.datetime "token_expires_at"
     t.integer  "vk_id"
     t.boolean  "should_notify",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "fakes", ["user_id"], name: "index_fakes_on_user_id", using: :btree
 
   create_table "fakes_friends", force: :cascade do |t|
-    t.integer "friend_id"
-    t.integer "fake_id"
+    t.integer  "friend_id"
+    t.integer  "fake_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "fakes_friends", ["fake_id"], name: "index_fakes_friends_on_fake_id", using: :btree
   add_index "fakes_friends", ["friend_id"], name: "index_fakes_friends_on_friend_id", using: :btree
 
   create_table "friends", force: :cascade do |t|
-    t.integer "vk_id"
-    t.boolean "notified", default: false
-    t.boolean "in_group", default: false
+    t.integer  "vk_id"
+    t.boolean  "notified",          default: false
+    t.boolean  "in_group",          default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "notification_date"
   end
 
   add_index "friends", ["in_group"], name: "index_friends_on_in_group", using: :btree
@@ -65,5 +72,11 @@ ActiveRecord::Schema.define(version: 20151025090756) do
   end
 
   add_index "statistics", ["fake_id"], name: "index_statistics_on_fake_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string "login"
+    t.string "string"
+    t.string "password_digest"
+  end
 
 end

@@ -1,0 +1,14 @@
+#authorization
+  .row
+    .col-m12
+      h4.center-align Авторизация
+      
+      = form_tag sessions_path do 
+          = label_tag :login
+          = text_field_tag :login, params[:login]
+
+          = label_tag :password
+          = password_field_tag :password
+
+          = submit_tag "Войти"
+      end 

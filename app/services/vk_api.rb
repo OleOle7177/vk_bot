@@ -45,7 +45,7 @@ module Services
     end
 
     # получение участников группы
-    def self.get_group_members(group_id)
+    def self.get_group_members(group_id, offset = 0)
 
       conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
         faraday.request :retry, max: 5, interval: 0.4,
@@ -58,6 +58,8 @@ module Services
 
       response = conn.get 'method/groups.getMembers',
         group_id: group_id,
+        offset: offset,
+        sort: 'id_asc',
         v: 5.37
 
       body = JSON.parse response.body
