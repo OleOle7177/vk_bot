@@ -1,5 +1,6 @@
 class Fake < ActiveRecord::Base
-  validates :first_name, :last_name, :login, :password, presence: true
+  validates :first_name, :last_name, :login, :password, :vk_id, 
+            presence: true
   validates :login, uniqueness: true  
 
   # belongs_to :user

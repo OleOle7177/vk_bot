@@ -7,41 +7,45 @@ module Services
     end
 
     def notify
-      # получаем друзей из вк
-      check_authorize
-      get_vk_friends
-      sleep(0.5)
-      # TODO сохранить friends_vk['count'] в БД
-
-      # получаем id людей в группе и смотрим кто из них 
-      # не помечен как в группе
-      get_our_group_members
-      sleep(0.5)
-
-      # Получить список друзей для этого фейка из бд 
-      # с notified: false, in_group: false
-      friends = @fake.friends.need_notify
-
-      # для каждого из полученных друзей проверяем уведомлен он или нет
-        # если нет, проверяем токен
-        # то отправляем сообщение
-        # ставим, что уведомлен
-        # записываем количество отправленных сообщений
-      friends.each do |friend|
+        # получаем друзей из вк
         check_authorize
-        notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
+        get_vk_friends
         sleep(0.5)
-        unless notified
-          check_authorize 
-          p 'NEED TO SEND MESSAGE'
-          p friend.vk_id
-          sleep(rand(1..20))
-          Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
-          friend.notified = true
-          friend.notification_date = Time.zone.now
-          friend.save
+        # TODO сохранить friends_vk['count'] в БД
+
+        # получаем id людей в группе и смотрим кто из них 
+        # не помечен как в группе
+        get_our_group_members
+        sleep(0.5)
+
+        # Получить список друзей для этого фейка из бд 
+        # с notified: false, in_group: false
+        friends = @fake.friends.need_notify
+
+        # для каждого из полученных друзей проверяем уведомлен он или нет
+          # если нет, проверяем токен
+          # то отправляем сообщение
+          # ставим, что уведомлен
+          # записываем количество отправленных сообщений
+        friends.each do |friend|
+          check_authorize
+          notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
+          sleep(0.5)
+          unless notified
+            check_authorize 
+            p 'NEED TO SEND MESSAGE'
+            p friend.vk_id
+            sleep(rand(1..20))
+            Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
+            friend.notified = true
+            friend.notification_date = Time.zone.now
+            friend.save
+          end
         end
-      end
+
+        check_authorize
+        p '&' * 50
+        view_notifications
 
     end
 
@@ -87,7 +91,7 @@ module Services
         
         auth_link = "https://oauth.vk.com/authorize?"+
           "client_id=#{VK_CONFIG['app_id']}&display=page&redirect_uri=blank.html&"+
-          "scope=friends,messages&response_type=token&v=5.37&revoke=1"
+          "scope=friends,messages,notifications&response_type=token&v=5.37&revoke=1"
           
         page = agent.get(auth_link)
 
@@ -166,6 +170,7 @@ module Services
     # проверяем истек ли токен, если да, то получаем новый
     def check_authorize
       p 'CHECK AUTHORIZE'
+
       if @fake.access_token.blank? || @fake.token_expires_at <= Time.zone.now 
         p 'NEED AUTHORIZE'
         authorize
@@ -173,6 +178,10 @@ module Services
       end
     end
 
+    # просмотр оповещений
+    def view_notifications
+      Services::VkApi.view_notifications(@fake.access_token)
+    end
 
   end
 end

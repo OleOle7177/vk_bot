@@ -1,6 +1,6 @@
-#authorization
-  .row
-    .col-m12
+.row#authorization
+  .col.m12    
+    .wrapper
       h4.center-align Авторизация
       
       = form_tag sessions_path do 
@@ -10,5 +10,6 @@
           = label_tag :password
           = password_field_tag :password
 
-          = submit_tag "Войти"
+          .center-align
+            = submit_tag "Войти", class: 'btn waves-effect waves-light  green darken-4'
       end 

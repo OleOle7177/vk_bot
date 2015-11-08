@@ -17,8 +17,6 @@
   margin-bottom: 64px;
 }
 
-#content {position: relative;}
-
 #authorization {
     position: absolute;
     top: 50%;
@@ -26,4 +24,14 @@
     height: 30%;
     width: 50%;
     margin: -15% 0 0 -25%;
+}
+
+.wrapper {
+  background-color: white;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.content {
+  
 }

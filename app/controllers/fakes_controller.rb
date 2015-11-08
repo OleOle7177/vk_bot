@@ -17,6 +17,7 @@ class FakesController < ApplicationController
   end
 
   def new 
+    @fake = Fake.new
   end
 
   def update 
@@ -26,10 +27,14 @@ class FakesController < ApplicationController
   end
 
   def notify
-    fake = Fake.find(params[:fake_id])
-    service = Services::Fake.new(fake)
-    service.notify
-    
+    begin
+      fake = Fake.find(params[:fake_id])
+      service = Services::Fake.new(fake)
+      service.notify
+    rescue StandardError => e
+      flash[:notice] = "Сообщения не отправлены, возникли ошибки."
+    end
+
     redirect_to fakes_path
   end
 

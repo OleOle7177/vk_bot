@@ -66,7 +66,6 @@ module Services
       body['response']
     end
 
-
     # получение списка сообщений с данным пользователем
     def self.get_messages(token, user_id)
 
@@ -86,6 +85,25 @@ module Services
 
       body = JSON.parse response.body
     
+      body['response']
+    end
+
+    # просмотр уведомлений
+    def self.view_notifications(token)
+      conn = Faraday.new(:url => 'https://api.vk.com/') do |faraday|
+        faraday.request :retry, max: 3, interval: 0.4,
+               interval_randomness: 0.5, backoff_factor: 2,
+               exceptions: ['Timeout::Error']
+        faraday.request :url_encoded             # form-encode POST params
+        faraday.response :logger                  # log requests to STDOUT
+        faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+      end
+
+      response = conn.get 'method/notifications.markAsViewed',
+        access_token: token, 
+        v: 5.37
+
+      body = JSON.parse response.body
       body['response']
     end
   end

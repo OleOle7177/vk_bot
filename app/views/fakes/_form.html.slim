@@ -1,0 +1,17 @@
+.row
+  .col.s6
+    = simple_form_for @fake do |f|
+      = f.input :first_name, label: 'Имя фейка'
+      = f.input :last_name, label: 'Фамилия фейка'
+      = f.input :login, label: 'Логин ВКонтакте'
+      = f.input :password, as: :string, input_html: { value: @fake.password.present? ? @fake.decrypted_password : nil }, label: 'Пароль ВКонтакте'
+
+      = f.input :vk_id, label: 'ID фейка ВКонтакте'
+      = f.input :message, label: 'Текст сообщения', input_html: {  rows: 7 , style: 'height: 100%' }
+      
+      = f.input :should_notify, label: 'Отправка сообщений по расписанию'
+      br
+      .right-align
+        = link_to 'Отмена', fakes_path
+        ' 
+        = f.button :submit, class: 'btn waves-effect waves-light green darken-4', label: 'Сохранить'

@@ -1,6 +1,9 @@
 tr 
-  td
+  td.col.s4
     = link_to "#{fake.first_name} #{fake.last_name}", fake_path(fake)
-  td
-    = link_to 'Отправить сообщения', notify_fakes_path(fake_id: fake.id), class: "waves-effect waves-light btn z-depth-0 notify"
-      
+  td.col.s4.right-align
+    = link_to 'Отправить сообщения', notify_fakes_path(fake_id: fake.id), class: "waves-effect waves-light btn z-depth-0 notify green darken-4"
+  td.col.s4.right-align
+    = link_to edit_fake_path(fake) do
+      i.material-icons create
+
