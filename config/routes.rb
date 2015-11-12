@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :fakes do
     collection do
       get 'notify'
+      get 'set_new_friends_notified'
     end
   end
 

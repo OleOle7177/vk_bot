@@ -9,7 +9,7 @@
       = f.input :vk_id, label: 'ID фейка ВКонтакте'
       = f.input :message, label: 'Текст сообщения', input_html: {  rows: 7 , style: 'height: 100%' }
       
-      = f.input :should_notify, label: 'Отправка сообщений по расписанию'
+      = f.input :schedule_notify, label: 'Отправка сообщений по расписанию'
       br
       .right-align
         = link_to 'Отмена', fakes_path

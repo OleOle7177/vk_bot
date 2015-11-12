@@ -7,45 +7,45 @@ module Services
     end
 
     def notify
-        # получаем друзей из вк
+      # получаем друзей из вк
+      check_authorize
+      get_vk_friends
+      sleep(0.5)
+      # TODO сохранить friends_vk['count'] в БД
+
+      # получаем id людей в группе и смотрим кто из них 
+      # не помечен как в группе
+      get_our_group_members
+      sleep(0.5)
+
+      # Получить список друзей для этого фейка из бд 
+      # с notified: false, in_group: false
+      friends = @fake.friends.need_notify
+
+      # для каждого из полученных друзей проверяем уведомлен он или нет
+        # если нет, проверяем токен
+        # то отправляем сообщение
+        # ставим, что уведомлен
+        # записываем количество отправленных сообщений
+      friends.each do |friend|
         check_authorize
-        get_vk_friends
+        notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
         sleep(0.5)
-        # TODO сохранить friends_vk['count'] в БД
-
-        # получаем id людей в группе и смотрим кто из них 
-        # не помечен как в группе
-        get_our_group_members
-        sleep(0.5)
-
-        # Получить список друзей для этого фейка из бд 
-        # с notified: false, in_group: false
-        friends = @fake.friends.need_notify
-
-        # для каждого из полученных друзей проверяем уведомлен он или нет
-          # если нет, проверяем токен
-          # то отправляем сообщение
-          # ставим, что уведомлен
-          # записываем количество отправленных сообщений
-        friends.each do |friend|
-          check_authorize
-          notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
-          sleep(0.5)
-          unless notified
-            check_authorize 
-            p 'NEED TO SEND MESSAGE'
-            p friend.vk_id
-            sleep(rand(1..20))
-            Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
-            friend.notified = true
-            friend.notification_date = Time.zone.now
-            friend.save
-          end
+        unless notified
+          check_authorize 
+          p 'NEED TO SEND MESSAGE'
+          p friend.vk_id
+          sleep(rand(1..20))
+          Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
+          friend.notified = true
+          friend.notification_date = Time.zone.now
+          friend.save
         end
+      end
 
-        check_authorize
-        p '&' * 50
-        view_notifications
+      check_authorize
+      p '&' * 50
+      view_notifications
 
     end
 
@@ -66,11 +66,8 @@ module Services
       diff_friends = friends_vk['items'] - friends_db
 
       # гтовим массив массивов для сохранения в бд
-      if set_notified == true
-        diff_friends.map!{|friend| [friend, true, false]}
-      else
-        diff_friends.map!{|friend| [friend, false, false]}
-      end
+      diff_friends.map!{|friend| [friend, set_notified, false]}
+      
       # сохраняем в бд
       ::Friend.import(['vk_id', 'notified', 'in_group'], diff_friends, validate: true)
 

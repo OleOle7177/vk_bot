@@ -1,0 +1,60 @@
+.row
+  .col.s4
+    h4 = [@fake.first_name, @fake.last_name].join(' ')
+  .col.s8.right-align
+    br
+    = link_to 'Пометить всех друзей уведомленными', set_new_friends_notified_fakes_path(fake_id: @fake.id), class: 'waves-effect waves-light btn z-depth-0 notify red darken-4'
+
+.row
+  table.bordered
+    thead
+    tbody
+      tr
+        td.col.s4
+          span Имя фейка
+        td.col.s8
+          b = @fake.first_name
+      
+      tr
+        td.col.s4
+          span Фамилия фейка
+        td.col.s8
+          b = @fake.last_name
+      
+      tr
+        td.col.s4
+          span ID фейка ВКонтакте
+        td.col.s8
+          b = @fake.vk_id
+      
+      tr
+        td.col.s4
+          span Данные для логина (телефон или email)
+        td.col.s8
+          b = @fake.login
+      
+      tr
+        td.col.s4
+          span Пароль
+        td.col.s8
+          b = @fake.decrypted_password
+
+      tr
+        td.col.s4
+          span Текст отправляемого сообщения
+        td.col.s8
+          b = @fake.message
+
+      tr
+        td.col.s4
+          span Уведомление по расписанию
+        td.col.s8
+          == boolean_icon(@fake.schedule_notify)
+
+    
+.row.center-align
+  = link_to 'Назад', fakes_path, class: 'waves-effect waves-light btn z-depth-0 green darken-4'
+
+
+
+

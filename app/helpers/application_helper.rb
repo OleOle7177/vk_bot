@@ -6,4 +6,9 @@ module ApplicationHelper
       link_to link_text, link_path
     end
   end
+
+  def boolean_icon(value)
+    value ? "<i class='material-icons'>done</i>" : "<i class='material-icons'>clear</i>" 
+  end
+
 end
