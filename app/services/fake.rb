@@ -18,6 +18,7 @@ module Services
       get_our_group_members
       sleep(0.5)
 
+      view_notifications
       # Получить список друзей для этого фейка из бд 
       # с notified: false, in_group: false
       friends = @fake.friends.need_notify
@@ -28,11 +29,9 @@ module Services
         # ставим, что уведомлен
         # записываем количество отправленных сообщений
       friends.each do |friend|
-        check_authorize
         notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
         sleep(0.5)
         unless notified
-          check_authorize 
           p 'NEED TO SEND MESSAGE'
           p friend.vk_id
           sleep(rand(1..20))
@@ -42,10 +41,6 @@ module Services
           friend.save
         end
       end
-
-      check_authorize
-      p '&' * 50
-      view_notifications
 
     end
 
@@ -168,7 +163,7 @@ module Services
     def check_authorize
       p 'CHECK AUTHORIZE'
 
-      if @fake.access_token.blank? || @fake.token_expires_at <= Time.zone.now 
+      if @fake.access_token.blank? || @fake.token_expires_at <= (Time.zone.now + rand(40..70).hour)        
         p 'NEED AUTHORIZE'
         authorize
         sleep(0.5)
