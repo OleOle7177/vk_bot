@@ -18,5 +18,6 @@
 
 /config/vk.yml
 /config/password.yml
+/config/secrets.yml
 
 .locum

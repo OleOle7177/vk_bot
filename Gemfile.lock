@@ -49,6 +49,14 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
+    capistrano-bundler (1.1.4)
+      capistrano (~> 3.1)
+      sshkit (~> 1.2)
+    capistrano-rails (1.1.3)
+      capistrano (~> 3.1)
+      capistrano-bundler (~> 1.1)
+    capistrano3-unicorn (0.2.1)
+      capistrano (~> 3.1, >= 3.1.0)
     codemirror-rails (5.6)
       railties (>= 3.0, < 5)
     coffee-rails (4.1.0)
@@ -207,7 +215,10 @@ DEPENDENCIES
   aes
   bcrypt
   byebug
-  capistrano (~> 3.4.0)
+  capistrano
+  capistrano-bundler
+  capistrano-rails
+  capistrano3-unicorn
   coffee-rails (~> 4.1.0)
   faraday
   jbuilder (~> 2.0)
