@@ -36,10 +36,10 @@ module Services
           p friend.vk_id
           sleep(rand(1..20))
           Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
-          friend.notified = true
           friend.notification_date = Time.zone.now
-          friend.save
         end
+        friend.notified = true
+        friend.save
       end
 
     end
