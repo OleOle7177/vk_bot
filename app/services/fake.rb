@@ -60,7 +60,7 @@ module Services
       # смотрим разницу
       diff_friends = friends_vk['items'] - friends_db
 
-      # гтовим массив массивов для сохранения в бд
+      # готовим массив массивов для сохранения в бд
       diff_friends.map!{|friend| [friend, set_notified, false]}
       
       # сохраняем в бд

@@ -5,7 +5,7 @@ lock '3.4.0'
 # Project configuration options
 # ------------------------------
 
-set :application,    'vk_bot'
+set :application,    'vk-bot'
 set :login,          'oleole7177'
 set :user,           'hosting_oleole7177'
 
