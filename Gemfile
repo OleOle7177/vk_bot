@@ -32,6 +32,12 @@ gem 'aes'
 gem 'bcrypt'
 gem 'simple_form'
 gem 'unicorn'
+gem 'sidekiq'
+gem 'redis'
+gem 'sinatra'
+# gem 'delayed_job'
+# gem 'delayed_job_active_record'
+# gem 'daemons'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
@@ -12,5 +13,6 @@ Rails.application.routes.draw do
   end
 
   resources :sessions
+  mount Sidekiq::Web, at: '/sidekiq'
 
 end

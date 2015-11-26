@@ -12,7 +12,7 @@ class Fake < ActiveRecord::Base
 
   IV = "\xDA\x96n\xEC\xC3Z\xF3\x88'oR\x94+2\x9B0"
 
-  scope :should_notify, -> { where(send_messages: true) }
+  scope :should_notify, -> { where(schedule_notify: true) }
 
 
   def encrypt_password

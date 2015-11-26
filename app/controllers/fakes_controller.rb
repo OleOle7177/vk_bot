@@ -48,13 +48,7 @@ class FakesController < ApplicationController
   end
 
   def notify
-    begin
-      fake = Fake.find(params[:fake_id])
-      service = Services::Fake.new(fake)
-      service.notify
-    rescue StandardError => e
-      flash[:notice] = 'Сообщения не отправлены, возникли ошибки.'
-    end
+    SingleNotifyWorker.perform_async(params[:fake_id])
 
     redirect_to fakes_path
   end

@@ -10,7 +10,9 @@ set :login,          'oleole7177'
 set :user,           'hosting_oleole7177'
 
 set :deploy_to,      "/home/#{fetch(:user)}/projects/#{fetch(:application)}"
-set :unicorn_conf,   "/etc/unicorn/#{fetch(:application)}.#{fetch(:login)}.rb"
+# set :unicorn_conf,   "/etc/unicorn/#{fetch(:application)}.#{fetch(:login)}.rb"
+set :unicorn_conf,   "/home/#{fetch(:user)}/projects/#{fetch(:application)}/shared/config/unicorn.rb"
+
 set :unicorn_pid,    "/var/run/unicorn/#{fetch(:user)}/" \
                      "#{fetch(:application)}.#{fetch(:login)}.pid"
 set :bundle_without, [:development, :test]
@@ -29,7 +31,7 @@ set :pty, true
 set :log_level, :info
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/vk.yml config/password.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/vk.yml config/password.yml config/secrets.yml config/unicorn.rb}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w(bin log tmp/cache vendor/bundle public/system)
@@ -77,7 +79,8 @@ namespace :deploy do
     on roles(:app) do
       execute "[ -f #{fetch(:unicorn_pid)} ] && " \
               "kill -USR2 `cat #{fetch(:unicorn_pid)}` || " \
-              "#{fetch(:unicorn_start_cmd)}"
+              "#{fetch(:unicorn_start_cmd)} || " \
+              "rvm use #{fetch(:rvm_ruby_version)} do bundle exec sidekiq"
     end
   end
 end
