@@ -80,10 +80,8 @@ namespace :deploy do
       execute "[ -f #{fetch(:unicorn_pid)} ] && " \
               "kill -USR2 `cat #{fetch(:unicorn_pid)}` || " \
               "#{fetch(:unicorn_start_cmd)} || " \
-              "RAILS_ENV=production rvm use #{fetch(:rvm_ruby_version)}" \ 
-              "do bundle exec sidekiq -c 7 -e production -L log/sidekiq.log -d"
+              "RAILS_ENV=production rvm use #{fetch(:rvm_ruby_version)} do bundle exec sidekiq -c 2 -e production -L log/sidekiq.log -d"
     end
   end
 
 end
-

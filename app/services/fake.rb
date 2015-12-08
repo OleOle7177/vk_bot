@@ -23,6 +23,11 @@ module Services
       # с notified: false, in_group: false
       friends = @fake.friends.need_notify
 
+      p '-' * 50
+      p friends.count
+      p '-' * 50
+
+
       # для каждого из полученных друзей проверяем уведомлен он или нет
         # если нет, проверяем токен
         # то отправляем сообщение
@@ -31,6 +36,10 @@ module Services
       friends.each do |friend|
         notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
         sleep(0.5)
+        p '-' * 50
+        p notified
+        p '-' * 50
+
         unless notified
           p 'NEED TO SEND MESSAGE'
           p friend.vk_id
@@ -38,10 +47,16 @@ module Services
           Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
           friend.notification_date = Time.zone.now
         end
-        friend.notified = true
-        friend.save
-      end
+        
+        p '<>' * 40
+        p friend
+        p '<>' * 40
+        if friend.notified.blank?
+          friend.notified = true
+          friend.save(validate: false)
+        end
 
+      end
     end
 
     def get_friends_in_group(group_id)
@@ -163,7 +178,7 @@ module Services
     def check_authorize
       p 'CHECK AUTHORIZE'
 
-      if @fake.access_token.blank? || @fake.token_expires_at <= (Time.zone.now + rand(40..70).hour)        
+      if @fake.access_token.blank? || @fake.token_expires_at <= (Time.zone.now + rand(40..70).minutes)        
         p 'NEED AUTHORIZE'
         authorize
         sleep(0.5)

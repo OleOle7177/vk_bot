@@ -51,6 +51,18 @@ class FakesController < ApplicationController
     SingleNotifyWorker.perform_async(params[:fake_id])
 
     redirect_to fakes_path
+    #   begin
+    #  fake = Fake.find(params[:fake_id])
+    #   service = Services::Fake.new(fake)
+    #   service.notify
+    # rescue StandardError => e
+    #   p '=' * 50 
+    #   p e.message
+    #   p '=' * 50 
+      
+    #   flash[:notice] = "Сообщения не отправлены, возникли ошибки."
+    # end
+
   end
 
   def set_new_friends_notified
