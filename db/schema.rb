@@ -11,17 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112065219) do
+ActiveRecord::Schema.define(version: 20151213093955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "event_types", force: :cascade do |t|
-    t.string "name"
-    t.string "systen_name"
-  end
-
-  add_index "event_types", ["systen_name"], name: "index_event_types_on_systen_name", using: :btree
 
   create_table "fakes", force: :cascade do |t|
     t.string   "first_name"

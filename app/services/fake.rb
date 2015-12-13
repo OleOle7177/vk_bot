@@ -7,6 +7,10 @@ module Services
     end
 
     def notify
+      p "START NOTIFY: #{@fake.first_name} #{@fake.last_name}"  
+      tries ||= 2
+
+      
       # получаем друзей из вк
       check_authorize
       get_vk_friends
@@ -23,9 +27,7 @@ module Services
       # с notified: false, in_group: false
       friends = @fake.friends.need_notify
 
-      p '-' * 50
-      p friends.count
-      p '-' * 50
+      p "#{@fake.first_name} #{@fake.last_name}: #{friends.count} new friends"
 
 
       # для каждого из полученных друзей проверяем уведомлен он или нет
@@ -33,30 +35,36 @@ module Services
         # то отправляем сообщение
         # ставим, что уведомлен
         # записываем количество отправленных сообщений
+      messages = 0
       friends.each do |friend|
         notified = Services::Friend.notified(@fake.access_token, friend.vk_id)
-        sleep(0.5)
-        p '-' * 50
-        p notified
-        p '-' * 50
 
         unless notified
-          p 'NEED TO SEND MESSAGE'
-          p friend.vk_id
+          messages += 1
           sleep(rand(1..20))
           Services::VkApi.send_message(@fake.access_token, friend.vk_id, @fake.message)
           friend.notification_date = Time.zone.now
         end
         
-        p '<>' * 40
-        p friend
-        p '<>' * 40
         if friend.notified.blank?
           friend.notified = true
           friend.save(validate: false)
         end
 
+        p "#{@fake.first_name} #{@fake.last_name}: #{messages} messages sent"
       end
+
+    rescue Exception => login_exception
+      p "#{@fake.first_name} #{@fake.last_name}: login problems - capture, wrong login/password, ban"
+    rescue StandardError => e
+      tries -= 1
+      if tries > 0
+        authorize
+        retry
+      else
+        p 'ERROR ' * 3
+        p e.message
+      end      
     end
 
     def get_friends_in_group(group_id)
@@ -127,6 +135,7 @@ module Services
         # на которую произошел редирект
         uri = page.uri.to_s
         pp uri
+        raise Exception.new('login_exception') if uri.include? 'sid'
 
         access_token = uri[/access_token=\w+/]
         expires_in = uri[/expires_in=\d+/]
@@ -142,7 +151,7 @@ module Services
         {access_token: access_token, expires_at: expires_at}
       rescue StandardError => e
         count += 1
-        retry if count <= 4
+        retry if count < 3
       end
 
     end

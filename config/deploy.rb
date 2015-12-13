@@ -79,9 +79,19 @@ namespace :deploy do
     on roles(:app) do
       execute "[ -f #{fetch(:unicorn_pid)} ] && " \
               "kill -USR2 `cat #{fetch(:unicorn_pid)}` || " \
-              "#{fetch(:unicorn_start_cmd)} || " \
-              "RAILS_ENV=production rvm use #{fetch(:rvm_ruby_version)} do bundle exec sidekiq -c 2 -e production -L log/sidekiq.log -d"
+              "#{fetch(:unicorn_start_cmd)}"
+    end
+  end
+
+  after "deploy:symlink", "deploy:update_crontab"
+
+  desc "Update the crontab file"
+    task :update_crontab do
+     on roles(:app) do
+      execute "cd #{fetch(:deploy_to)}/current && whenever --update-crontab #{application}"
     end
   end
 
 end
+
+#RAILS_ENV=production rvm use 2.2 do bundle exec sidekiq -c 1 -e production -L log/sidekiq.log -d
