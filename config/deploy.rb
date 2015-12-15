@@ -83,15 +83,19 @@ namespace :deploy do
     end
   end
 
-  after "deploy:symlink", "deploy:update_crontab"
-
-  desc "Update the crontab file"
-    task :update_crontab do
-     on roles(:app) do
-      execute "cd #{fetch(:deploy_to)}/current && whenever --update-crontab #{application}"
+  desc "Update crontab with whenever"
+  task :update_cron do
+    on roles(:app) do
+      within current_path do
+        execute :bundle, :exec, "whenever --update-crontab #{fetch(:application)}"
+      end
     end
   end
 
+  after :finishing, 'deploy:update_cron'
 end
+
+#ps -mu hosting_oleole7177
+#kill NUMBER
 
 #RAILS_ENV=production rvm use 2.2 do bundle exec sidekiq -c 1 -e production -L log/sidekiq.log -d
