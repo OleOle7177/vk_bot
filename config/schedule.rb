@@ -18,6 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+env :GEM_PATH, ENV['GEM_PATH']
 set :output, "#{path}/log/whenever.log"
 
 every 6.hours, :roles => [:app] do
