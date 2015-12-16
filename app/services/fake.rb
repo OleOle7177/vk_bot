@@ -28,6 +28,7 @@ module Services
       friends = @fake.friends.need_notify
 
       p "#{@fake.first_name} #{@fake.last_name}: #{friends.count} new friends"
+      AddFriend.new(fake: @fake, count: friends.count)
 
 
       # для каждого из полученных друзей проверяем уведомлен он или нет
@@ -51,11 +52,14 @@ module Services
           friend.save(validate: false)
         end
 
-        p "#{@fake.first_name} #{@fake.last_name}: #{messages} messages sent"
       end
+      
+      p "#{@fake.first_name} #{@fake.last_name}: #{messages} messages sent"
+      SendMessage.create(fake: @fake, count: messages)
 
     rescue Exception => login_exception
       p "#{@fake.first_name} #{@fake.last_name}: login problems - capture, wrong login/password, ban"
+      Error.create(fake: @fake, note: 'Login problems - capture, wrong login/password, ban')
     rescue StandardError => e
       tries -= 1
       if tries > 0

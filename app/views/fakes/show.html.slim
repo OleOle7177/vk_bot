@@ -51,6 +51,18 @@
         td.col.s8
           == boolean_icon(@fake.schedule_notify)
 
+
+/ .row
+/   table.bordered
+/     thead
+/     tbody
+/       tr
+/         td.col.s2
+/           span system_journal.created_at.strftime
+/         td.col.s8
+/           span 
+
+
     
 .row.center-align
   = link_to 'Назад', fakes_path, class: 'waves-effect waves-light btn z-depth-0 green darken-4'

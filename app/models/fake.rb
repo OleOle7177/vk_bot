@@ -6,7 +6,8 @@ class Fake < ActiveRecord::Base
   # belongs_to :user
   has_many :fakes_friends
   has_many :friends, through: :fakes_friends
-  has_many :statistics
+  has_many :system_journals
+
 
   before_save :encrypt_password, if: :password_changed?
 
@@ -23,5 +24,16 @@ class Fake < ActiveRecord::Base
     AES.decrypt(password, PASSWORD_CONFIG['key'])
   end
 
+  def add_friends 
+    AddFriend.where(fake_id: id)
+  end
+
+  def errors 
+    Error.where(fake_id: id)
+  end
+
+  def send_messages 
+    SendMessage.where(fake_id: id)
+  end
 
 end
