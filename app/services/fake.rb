@@ -28,7 +28,7 @@ module Services
       friends = @fake.friends.need_notify
 
       p "#{@fake.first_name} #{@fake.last_name}: #{friends.count} new friends"
-      AddFriend.new(fake: @fake, count: friends.count)
+      AddFriend.create(fake: @fake, count: friends.count)
 
 
       # для каждого из полученных друзей проверяем уведомлен он или нет
