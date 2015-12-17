@@ -96,6 +96,7 @@ namespace :deploy do
 end
 
 #ps -mu hosting_oleole7177
+#xargs -0 </proc/NUMBER/cmdline 
 #kill NUMBER
 
 #RAILS_ENV=production rvm use 2.2 do bundle exec sidekiq -c 1 -e production -L log/sidekiq.log -d
