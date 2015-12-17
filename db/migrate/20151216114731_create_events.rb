@@ -1,6 +1,6 @@
-class CreateSystemJournals < ActiveRecord::Migration
+class CreateEvents < ActiveRecord::Migration
   def change
-    create_table :system_journals do |t|
+    create_table :events do |t|
       t.integer :fake_id, integer: true
       t.string  :type
       t.text    :note

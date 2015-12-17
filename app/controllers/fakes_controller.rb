@@ -8,6 +8,7 @@ class FakesController < ApplicationController
   end
 
   def show
+    @events = @fake.events.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def edit

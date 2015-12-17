@@ -1,4 +1,5 @@
 module ApplicationHelper
+  
   def nav_link(link_text, link_path)
     class_name = current_page?(link_path) ? 'active' : ''
 
@@ -10,5 +11,5 @@ module ApplicationHelper
   def boolean_icon(value)
     value ? "<i class='material-icons'>done</i>" : "<i class='material-icons'>clear</i>" 
   end
-
+  
 end

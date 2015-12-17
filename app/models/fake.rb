@@ -3,10 +3,9 @@ class Fake < ActiveRecord::Base
             presence: true
   validates :login, uniqueness: true  
 
-  # belongs_to :user
   has_many :fakes_friends
   has_many :friends, through: :fakes_friends
-  has_many :system_journals
+  has_many :events
 
 
   before_save :encrypt_password, if: :password_changed?

@@ -16,6 +16,15 @@ ActiveRecord::Schema.define(version: 20151216114731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "events", force: :cascade do |t|
+    t.integer  "fake_id"
+    t.string   "type"
+    t.text     "note"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "fakes", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -65,15 +74,6 @@ ActiveRecord::Schema.define(version: 20151216114731) do
   end
 
   add_index "statistics", ["fake_id"], name: "index_statistics_on_fake_id", using: :btree
-
-  create_table "system_journals", force: :cascade do |t|
-    t.integer  "fake_id"
-    t.string   "type"
-    t.text     "note"
-    t.integer  "count"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "users", force: :cascade do |t|
     t.string "login"

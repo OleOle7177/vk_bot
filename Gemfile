@@ -36,6 +36,7 @@ gem 'sidekiq'
 gem 'redis'
 gem 'sinatra'
 gem 'whenever', :require => false
+gem 'kaminari'
 # gem 'delayed_job'
 # gem 'delayed_job_active_record'
 # gem 'daemons'

@@ -24,7 +24,7 @@ module VkBot
     config.active_record.raise_in_transactional_callbacks = true
 
     config.autoload_paths += Dir[File.join(Rails.root, "app", "services", "*.rb"), 
-                                File.join(Rails.root, 'app', 'models', 'system_journal', '*.rb')].
+                                File.join(Rails.root, 'app', 'models', 'events', '*.rb')].
                                 each {|l| require l }
     config.active_job.queue_adapter = :sidekiq
   end

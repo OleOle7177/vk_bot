@@ -1,0 +1,13 @@
+tr
+  td.col.s2
+    span = event.created_at.localtime.strftime('%d.%m.%Y %T')
+  td.col.s1
+    span = event.count
+  td.col.s8
+    - case event.type
+    - when 'AddFriend' 
+      span = 'Добавлены друзья'
+    - when 'SendMessage'
+      span = 'Отправлены сообщения'
+    - when 'Error'
+      span = event.note
