@@ -18,8 +18,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-env :PATH, ENV['PATH']
+# env :PATH, ENV['PATH']
 set :output, "#{path}/log/whenever.log"
+job_type :rake,    "cd :path && :environment_variable=:environment rvm use 2.2 do bundle exec rake :task --silent :output"
 
 every 6.hours, :roles => [:app] do
   rake "notify"
