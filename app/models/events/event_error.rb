@@ -1,4 +1,4 @@
 require "#{Rails.root}/app/models/events/event.rb"
 
-class Error < Event
+class EventError < Event
 end

@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
 
   def to_s
     case type 
-      when 'Error'
+      when 'EventError'
         "#{created_at.localtime.strftime('%d.%m.%Y %T')}: #{note}"
       when 'AddFriend'
         "#{created_at.localtime.strftime('%d.%m.%Y %T')}: Добавлено #{count} новых друзей"

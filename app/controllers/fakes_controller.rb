@@ -83,6 +83,9 @@ class FakesController < ApplicationController
 
   def set_fake
     @fake = Fake.find(params[:id])
+    p '-' * 50
+    p @fake
+    p '-' * 50
   end
 
   def fake_params 

@@ -1,8 +1,8 @@
 .row
-  .col.s6
+  .col.s4
     = simple_form_for @fake do |f|
       = f.input :first_name, label: 'Имя фейка'
-      = f.input :last_name, label: 'Фамилия фейка'
+      = f.text_field :last_name
       = f.input :login, label: 'Логин ВКонтакте'
       = f.input :password, as: :string, input_html: { value: @fake.password.present? ? @fake.decrypted_password : nil }, label: 'Пароль ВКонтакте'
 

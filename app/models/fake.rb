@@ -27,8 +27,8 @@ class Fake < ActiveRecord::Base
     AddFriend.where(fake_id: id)
   end
 
-  def errors 
-    Error.where(fake_id: id)
+  def event_errors 
+    EventError.where(fake_id: id)
   end
 
   def send_messages 

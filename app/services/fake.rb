@@ -59,7 +59,7 @@ module Services
 
     rescue Exception => login_exception
       p "#{@fake.first_name} #{@fake.last_name}: login problems - capture, wrong login/password, ban"
-      Error.create(fake: @fake, note: 'Проблемы с входом - капча, неправильный логин/пароль, бан')
+      EventError.create(fake: @fake, note: 'Проблемы с входом - капча, неправильный логин/пароль, бан')
     rescue StandardError => e
       tries -= 1
       if tries > 0
